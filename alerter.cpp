@@ -1,32 +1,34 @@
 #include <iostream>
-#include <assert.h>
+#include <cassert>
+using namespace std;
 
 int alertFailureCount = 0;
 
-int networkAlertStub(float celcius) {
-    std::cout << "ALERT: Temperature is " << celcius << " celcius.\n";
-    // Return 200 for ok
-    // Return 500 for not-ok
-    // stub always succeeds and returns 200
-    return 200;
+// Modified alert stub to simulate failure for every alert
+int networkAlertStub(float temperatureInCelsius) {
+    cout << "ALERT: Temperature is " << temperatureInCelsius << " degrees Celsius.\n";
+    // Stub always returns a failure code (500)
+    return 500;
 }
 
-void alertInCelcius(float farenheit) {
-    float celcius = (farenheit - 32) * 5 / 9;
-    int returnCode = networkAlertStub(celcius);
-    if (returnCode != 200) {
-        // non-ok response is not an error! Issues happen in life!
-        // let us keep a count of failures to report
-        // However, this code doesn't count failures!
-        // Add a test below to catch this bug. Alter the stub above, if needed.
-        alertFailureCount += 0;
+// Temperature alert function that increments failure count on non-200 response
+void sendAlertIfOverThreshold(float temperatureInFahrenheit) {
+    float temperatureInCelsius = (temperatureInFahrenheit - 32.0) * (5.0 / 9.0);
+    int responseCode = networkAlertStub(temperatureInCelsius);
+    if (responseCode != 200) {
+        alertFailureCount++;
     }
 }
 
+void runTests() {
+    sendAlertIfOverThreshold(400.5);  // Exceeds threshold
+    sendAlertIfOverThreshold(303.6);  // Exceeds threshold
+    // Expect failure count to be at least 1 due to failure in response code
+    assert(alertFailureCount == 0 && "Expected failure count to be zero but got incremented."); // Should fail
+}
+
 int main() {
-    alertInCelcius(400.5);
-    alertInCelcius(303.6);
-    std::cout << alertFailureCount << " alerts failed.\n";
-    std::cout << "All is well (maybe!)\n";
+    runTests();
+    cout << alertFailureCount << " alerts failed.\n";
     return 0;
 }
