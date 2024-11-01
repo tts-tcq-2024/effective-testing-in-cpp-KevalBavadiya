@@ -22,32 +22,25 @@ string generateColorMap() {
     return mapStream.str();
 }
 
-// Wrapper function to print the color map
-int displayColorMap() {
-    cout << generateColorMap();
-    return 25;
-}
-
 // Test function for verifying color map format and alignment
 void testGenerateColorMap() {
     ostringstream expectedOutput;
     for (int primaryIndex = 0; primaryIndex < 5; ++primaryIndex) {
         for (int secondaryIndex = 0; secondaryIndex < 5; ++secondaryIndex) {
             int pairId = primaryIndex * 5 + secondaryIndex;
+            // Intentionally create a mismatch in expected output
             expectedOutput << setw(2) << pairId << " | "
-                           << setw(6) << primaryColors[primaryIndex] << " | "
-                           << setw(6) << secondaryColors[secondaryIndex] << "\n";
+                           << setw(5) << primaryColors[primaryIndex] << " | "  // Incorrect width
+                           << setw(7) << secondaryColors[secondaryIndex] << "\n"; // Incorrect width
         }
     }
 
-    // Check if generated output matches expected output
+    // Test should fail due to intentional mismatch in expected output
     assert(generateColorMap() == expectedOutput.str() && "Alignment or values in color map are incorrect.");
 }
 
 int main() {
-    int result = displayColorMap();
-    assert(result == 25 && "Function should return 25 pairs.");
     testGenerateColorMap();
-    cout << "All is well (maybe!)\n";
+    cout << "Color map tests completed.\n";
     return 0;
 }
