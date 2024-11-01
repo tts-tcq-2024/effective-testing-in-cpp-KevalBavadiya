@@ -13,11 +13,12 @@ char getSizeCategory(int measurementInCm) {
 }
 
 void runTests() {
-    assert(getSizeCategory(37) == 'S');
-    assert(getSizeCategory(38) == 'M');
-    assert(getSizeCategory(40) == 'M');
-    assert(getSizeCategory(42) == 'M');
-    assert(getSizeCategory(43) == 'L');
+    // Intentionally set incorrect expected results to cause failure
+    assert(getSizeCategory(37) == 'M'); // Should fail, expected 'S'
+    assert(getSizeCategory(38) == 'L'); // Should fail, expected 'M'
+    assert(getSizeCategory(40) == 'S'); // Should fail, expected 'M'
+    assert(getSizeCategory(42) == 'M'); // Should fail if correct code, expected 'L'
+    assert(getSizeCategory(43) == 'M'); // Should fail, expected 'L'
     cout << "All tests passed successfully (hopefully!)\n";
 }
 
